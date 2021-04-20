@@ -258,6 +258,43 @@
       "files": {
         "function.java": "package $packageName$;\n\nimport com.microsoft.azure.functions.annotation.*;\nimport com.microsoft.azure.functions.*;\n\n/**\n * Azure Functions with Service Topic Trigger.\n */\npublic class $className$ {\n    /**\n     * This function will be invoked when a new message is received at the Service Bus Topic.\n     */\n    @FunctionName(\"$functionName$\")\n    public void run(\n        @ServiceBusTopicTrigger(\n            name = \"message\",\n            topicName = \"$topicName$\",\n            subscriptionName = \"$subscriptionName$\",\n            connection = \"$connection$\"\n        )\n        String message,\n        final ExecutionContext context\n    ) {\n        context.getLogger().info(\"Java Service Bus Topic trigger function executed.\");\n        context.getLogger().info(message);\n    }\n}"
       }
+    },
+    {
+      "id": "KafkaTrigger-Java",
+      "metadata": {
+        "name": "KafkaTrigger",
+        "description": "$KafkaTrigger_description",
+        "defaultFunctionName": "KafkaTriggerJava",
+        "language": "Java",
+        "userPrompt": [
+          "name",
+          "topic",
+          "brokerList",
+          "consumerGroup",
+          "authenticationMode",
+          "protocol"
+        ]
+      },
+      "function": {
+        "disabled": false,
+        "bindings": [
+          {
+            "name": "kafkaOutput",
+            "type": "kafkaTrigger",
+            "direction": "in",
+            "brokerList": "BrokerList",
+            "topic": "topic",
+            "username": "$ConnectionString",
+            "password": "%Password%",
+            "protocol": "saslSsl",
+            "authenticationMode": "plain",
+            "consumerGroup": "$Default"
+          }
+        ]
+      },
+      "files": {
+        "function.java": "package $packageName$;\n\nimport com.microsoft.azure.functions.annotation.*;\nimport com.microsoft.azure.functions.*;\n\n/**\n * Azure Functions with Kafka Trigger.\n */\npublic class $className$ {\n    /**\n     * This function consume KafkaEvents on the localhost. Change the topic, brokerList, and consumerGroup to fit your enviornment.\n     * The function is trigged one for each KafkaEvent\n     * @param kafkaEventData\n     * @param context\n     */\n    @FunctionName(\"$functionName$\")\n    public void run(\n            @KafkaTrigger(name = \"$name$\", \n                          topic = \"$topic$\", \n                          brokerList = \"$brokerList$\",\n                          username = \"$ConnectionString\",\n                          password = \"%Password%\",\n                          authenticationMode = BrokerAuthenticationMode.$authenticationMode$,\n                          protocol = BrokerProtocol.$protocol$,\n                          consumerGroup=\"$Default\") String kafkaEventData,\n            final ExecutionContext context) {\n        context.getLogger().info(kafkaEventData);\n    }\n}"
+      }
     }
   ]
 }
