@@ -22,7 +22,7 @@
 
 package com.microsoft.azure.toolkit.lib.common.operation;
 
-import com.microsoft.azure.toolkit.lib.common.messager.AzureMessageBundle;
+import com.microsoft.azure.toolkit.lib.common.bundle.AzureBundle;
 import lombok.Builder;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -31,9 +31,9 @@ import java.util.Objects;
 
 public class AzureOperationBundle {
 
-    private static AzureMessageBundle provider;
+    private static AzureBundle provider;
 
-    public static synchronized void register(AzureMessageBundle bundle) {
+    public static synchronized void register(AzureBundle bundle) {
         if (AzureOperationBundle.provider == null) {
             AzureOperationBundle.provider = bundle;
         }
@@ -52,7 +52,7 @@ public class AzureOperationBundle {
 
         public String toString() {
             if (Objects.isNull(this.title)) {
-                this.title = provider.getMessage(this.name, params);
+                this.title = provider.message(this.name, params);
             }
             return this.title;
         }
